@@ -1,0 +1,21 @@
+services:
+  memcached:
+    image: memcached:alpine
+    container_name: memcached
+    restart: unless-stopped
+    ports:
+      - "11211:11211"
+    command:
+      - --conn-limit=1024
+      - --memory-limit=64
+      - --threads=4
+    networks:
+      - default
+    # - custom-network
+
+
+networks:
+  default:
+    driver: bridge
+# custom-network:
+#   external: true

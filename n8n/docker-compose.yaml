@@ -1,0 +1,28 @@
+services:
+  n8n:
+    container_name: n8n
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    environment:
+      - GENERIC_TIMEZONE=Asia/Kolkata
+      - TZ=Asia/Kolkata
+    # - WEBHOOK_URL=https://example.com/
+    # - N8N_SECURE_COOKIE=false
+    volumes:
+    # - "./n8ndata:/home/node/.n8n"
+      - "n8n-data:/home/node/.n8n"
+    restart: always
+    networks:
+      - default
+    # - custom-network
+
+volumes:
+  n8n-data:
+    driver: local
+
+networks:
+  default:
+    driver: bridge
+# custom-network:
+#   external: true

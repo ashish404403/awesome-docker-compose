@@ -1,0 +1,49 @@
+services:
+   mariadb:
+     image: mariadb:lts
+     container_name: mariadb
+     volumes:
+   #   - ./mariadb_data:/var/lib/mysql
+       - mariadb-data:/var/lib/mysql
+     restart: always
+     environment:
+       MARIADB_ROOT_PASSWORD:  ${MARIADB_ROOT_PASSWORD}
+       MARIADB_DATABASE:  ${MARIADB_DATABASE}
+       MARIADB_USER:  ${MARIADB_USER}
+       MARIADB_PASSWORD:  ${MARIADB_PASSWORD}
+     networks:
+       - default
+     # - custom-network
+
+   wordpress:
+     image: wordpress:latest
+     container_name: wordpress
+     ports:
+       - "80:80"
+     restart: always
+     volumes:
+     # - ./wordpress_data:/var/www/html
+       - wordpress_data:/var/www/html
+     environment:
+       WORDPRESS_DB_HOST: mariadb:3306
+       WORDPRESS_DB_NAME: ${MARIADB_DATABASE}
+       WORDPRESS_DB_USER: ${MARIADB_USER}
+       WORDPRESS_DB_PASSWORD: ${MARIADB_PASSWORD}
+     networks:
+       - default
+     # - custom-network
+     depends_on:
+       - mariadb
+
+volumes:
+    mariadb-data:
+      driver: local
+    wordpress_data:
+      driver: local
+
+networks:
+  default:
+    driver: bridge
+# custom-network:
+#   external: true
+

@@ -1,0 +1,24 @@
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.23
+    container_name: meilisearch
+    restart: unless-stopped
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_MASTER_KEY: "MASTER_KEY"
+    volumes:
+      - meili_data:/meili_data
+    networks:
+      - default
+    # - custom-network
+
+volumes:
+  meili_data:
+    driver: local
+
+networks:
+  default:
+    driver: bridge
+# custom-network:
+#   external: true

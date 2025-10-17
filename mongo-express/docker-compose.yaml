@@ -1,0 +1,27 @@
+services:
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: unless-stopped
+    ports:
+      - "8083:8081"
+#   depends_on:
+#     - mongo
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: mongo-admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: mongo-password
+      ME_CONFIG_BASICAUTH_USERNAME: username
+      ME_CONFIG_BASICAUTH_PASSWORD: password
+    # ME_CONFIG_OPTIONS_EDITORTHEME: dracula
+    networks:
+      - default
+    # - custom-network
+
+networks:
+  default:
+    driver: bridge
+# custom-network:
+#   external: true
+

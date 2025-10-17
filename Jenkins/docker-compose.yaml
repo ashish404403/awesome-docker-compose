@@ -1,0 +1,54 @@
+services:
+  jenkins:
+    image: jenkins/jenkins:2.516.2-lts
+    container_name: jenkins
+    restart: unless-stopped
+   #user: root   # force run Jenkins as root to use docker host agent unix:///var/run/docker.sock
+    ports:
+      - "8080:8080"    # 8080Jenkins web UI
+     #- "50000:50000"  # JNLP agent port
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Optional host bind mount (uncomment to use a host directory instead)
+    # - /home/jenkins_home:/var/jenkins_home
+   #environment:
+      # Example JVM options; uncomment to skip setup wizard (use with care)
+    # - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+    networks:
+      - default
+    # - custom-network
+    group_add:
+      - 994
+                      # <--- put your docker group ID here > getent group docker
+   #user: "1000:994"  # Jenkins UID + docker group GID
+                      #docker exec -it jenkins bash
+                      #id   # should show groups including gid=994(docker)
+
+
+ #socat:
+   #image: alpine/socat:latest
+   #container_name: socat
+   #command: "TCP-LISTEN:2375,fork,reuseaddr UNIX-CONNECT:/var/run/docker.sock"
+   #networks:
+   #  - jenkins_network
+   #ports:
+   #  - "127.0.0.1:2375:2375"
+   #volumes:
+   #  - /var/run/docker.sock:/var/run/docker.sock:ro
+   #restart: unless-stopped
+
+volumes:
+  jenkins_home:
+    driver: local
+
+networks:
+  default:
+    driver: bridge
+# custom-network:
+#   external: true
+
+
+
+
+

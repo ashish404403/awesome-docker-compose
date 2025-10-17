@@ -1,0 +1,35 @@
+services:
+  nginx-proxy-manager:
+    container_name: nginx-proxy-manager
+    image: jc21/nginx-proxy-manager:latest
+    volumes:
+    # - ./data:/data
+      - npxm-data:/data
+    # - ./letsencrypt:/etc/letsencrypt
+      - letsencrypt-data:/etc/letsencrypt
+    ports:
+      - "81:81"
+      - "80:80"
+      - "443:443"
+    environment:
+      DISABLE_IPV6: 'true'
+    restart: unless-stopped
+    networks:
+      - default
+  #   - custom-network
+    healthcheck:
+      test: ["CMD", "/bin/check-health"]
+      interval: 10s
+      timeout: 3s
+
+volumes:
+  npxm-data:
+    driver: local
+  letsencrypt-data:
+    driver: local
+
+networks:
+  default:
+    driver: bridge
+ #custom-network:
+ #  external: true

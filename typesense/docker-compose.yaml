@@ -1,0 +1,28 @@
+services:
+  typesense:
+    image: typesense/typesense:29.0
+    container_name: typesense
+    ports:
+      - "8108:8108"
+    volumes:
+    # - ./typesense-data:/data
+      - typesense-data:/data
+    command: >
+      --data-dir /data
+      --api-key=TYPESENSE_API_KEY
+      --enable-cors
+    restart: unless-stopped
+    networks:
+      - default
+  #   - custom-network
+
+volumes:
+  typesense-data:
+    driver: local
+    
+networks:
+  default:
+    driver: bridge
+ #custom-network:
+ #  external: true
+
